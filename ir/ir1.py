@@ -1,0 +1,27 @@
+import string
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+from nltk.tokenize import word_tokenize
+
+nltk.download('punkt', quiet=True)
+nltk.download('stopwords', quiet=True)
+
+def preprocess_text(text: str):
+    text = text.lower()
+    tokens = word_tokenize(text)
+    tokens = [t for t in tokens if t not in string.punctuation]
+    stop_words = set(stopwords.words('english'))
+    filtered = [w for w in tokens if w not in stop_words]
+    stemmer = PorterStemmer()
+    stemmed = [stemmer.stem(w) for w in filtered]
+
+    return {
+        "original": tokens,
+        "filtered": filtered,
+        "stemmed": stemmed
+    }
+
+if __name__ == "__main__":
+    text = "The algorithms are analyzing multiple datasets efficiently."
+    print(preprocess_text(text))
